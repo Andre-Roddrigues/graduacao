@@ -12,8 +12,6 @@ export function middleware(req: NextRequest) {
     "/recuperar-senha",
     "/formulario/parceiro",
     "/cursos",
-    "/user/graduacao/pagamento",
-    "/user/graduacao",
     "/testes",
     "/nossos-termos",
      "/nova-senha",         // adicionado

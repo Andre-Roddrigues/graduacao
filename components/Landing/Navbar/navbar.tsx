@@ -221,10 +221,10 @@ const Navbar = () => {
               <div className="flex items-center bg-white justify-between p-6 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center">
                   <div className="w-8 h-8 rounded-lg bg-brand-lime flex items-center justify-center">
-                    <Briefcase className="w-5 h-5 text-white" />
+                    {/* <Briefcase className="w-5 h-5 text-white" /> */}
                   </div>
                   <span className="ml-3 text-xl font-bold text-brand-main dark:text-white">
-                    PROMET
+                    UNITEC
                   </span>
                 </div>
                 <button
