@@ -16,12 +16,12 @@ const Navbar = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const menuItems = [
-    { name: "Início", href: "/", icon: Briefcase },
-    { name: "Sobre", href: "/#sobre", icon: Briefcase },
-    { name: "Áreas de Formação", href: "/cursos", icon: GraduationCap  },
-    { name: "Como Funciona", href: "/#funcionamento", icon: Info  },
-    { name: "Benefícios", href: "/#beneficios", icon: Briefcase },
-    { name: "Contacto", href: "/#contacto", icon: Briefcase },
+    // { name: "Início", href: "/", icon: Briefcase },
+    // { name: "Sobre", href: "/#sobre", icon: Briefcase },
+    // { name: "Áreas de Formação", href: "/cursos", icon: GraduationCap  },
+    // { name: "Como Funciona", href: "/#funcionamento", icon: Info  },
+    // { name: "Benefícios", href: "/#beneficios", icon: Briefcase },
+    { name: "", href: "/#contacto", icon: Briefcase },
   ];
 
   const mobileSidebarVariants = {

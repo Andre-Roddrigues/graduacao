@@ -43,7 +43,7 @@ export default function CTAGraduacao() {
                     {/* CTA */}
                     <div className="flex flex-wrap items-center gap-4">
                         <a
-                            href="/user/graduacao/pagamento"
+                            href="/user/graduacao"
                             className="bg-brand-lime hover:bg-brand-blue text-white font-semibold px-6 py-3 rounded-full text-sm transition-colors"
                         >
                             PAGAR GRADUAÇÃO
@@ -110,7 +110,7 @@ function CompactCountdown() {
 // Componente de Contagem Regressiva Principal
 function CountdownTimer() {
     const calculateTimeLeft = () => {
-        const targetDate = new Date('2025-12-31T23:59:59');
+        const targetDate = new Date('2025-11-28T23:59:59');
         const now = new Date();
         const difference = targetDate.getTime() - now.getTime();
 

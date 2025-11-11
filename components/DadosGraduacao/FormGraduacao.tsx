@@ -1,969 +1,632 @@
-"use client";
+import React, { useState } from 'react';
+import { 
+  User, 
+  GraduationCap, 
+  Briefcase, 
+  Languages, 
+  Award,
+  ChevronRight,
+  Save,
+  Plus,
+  Trash2,
+  Edit2,
+  CheckCircle
+} from 'lucide-react';
 
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Plus, Trash2, Upload, User, GraduationCap, Briefcase, Languages, Award } from "lucide-react";
-import { format } from "date-fns";
-import { pt } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-
-export default function CandidatoForm() {
-  const [activeTab, setActiveTab] = useState("pessoal");
-  const [loading, setLoading] = useState(false);
-
-  // Estados para dados pessoais
-  const [dadosPessoais, setDadosPessoais] = useState({
-    nome: "",
-    apelido: "",
-    email: "",
-    contacto: "",
-    whatsapp: "",
-    dataNascimento: "" as Date | undefined,
-    provincia: "",
-    morada: "",
-    numeroBi: "",
-    nivelAcademico: "",
-    genero: "",
-    idiomaNativo: "",
+export default function GraduationForm() {
+  const [activeTab, setActiveTab] = useState(0);
+  const [completedTabs, setCompletedTabs] = useState<number[]>([]);
+  
+  // Estados para Dados Pessoais
+  const [personalData, setPersonalData] = useState({
+    provincia: '',
+    morada: '',
+    dataNascimento: '',
+    numeroBi: '',
+    nivelAcademico: '',
+    contacto: '',
+    whatsapp: '',
+    tipoDocumento: '',
+    genero: '',
+    idiomaNativo: '',
+    isFromUnitec: false
   });
 
-  // Estados para formações
-  const [formacoes, setFormacoes] = useState([{
-    local: "",
-    nome: "",
-    descricao: "",
-    duracao: "",
-    dataInicio: "" as Date | undefined,
-    dataFim: "" as Date | undefined,
-  }]);
+  // Estados para Formações
+  const [formations, setFormations] = useState<Array<{
+    id: number;
+    local: string;
+    nome: string;
+    descricao: string;
+    duracao: string;
+    dataInicio: string;
+    dataFim: string;
+  }>>([]);
+  const [formationForm, setFormationForm] = useState({
+    local: '',
+    nome: '',
+    descricao: '',
+    duracao: '',
+    dataInicio: '',
+    dataFim: ''
+  });
 
-  // Estados para experiências
-  const [experiencias, setExperiencias] = useState([{
-    organizacao: "",
-    cargo: "",
-    descricao: "",
-    dataInicio: "" as Date | undefined,
-    dataFim: "" as Date | undefined,
-  }]);
+  // Estados para Experiências
+  const [experiences, setExperiences] = useState<Array<{
+    id: number;
+    organizacao: string;
+    cargo: string;
+    descricao: string;
+    dataInicio: string;
+    dataFim: string;
+  }>>([]);
+  const [experienceForm, setExperienceForm] = useState({
+    organizacao: '',
+    cargo: '',
+    descricao: '',
+    dataInicio: '',
+    dataFim: ''
+  });
 
-  // Estados para idiomas
-  const [idiomas, setIdiomas] = useState([{
-    nome: "",
-    fluencia: "",
-  }]);
+  // Estados para Idiomas
+  const [languages, setLanguages] = useState<Array<{ id: number; idIdioma: string; fluencia: string }>>([]);
+  const [languageForm, setLanguageForm] = useState({
+    idIdioma: '',
+    fluencia: ''
+  });
 
-  // Estados para certificados
-  const [certificados, setCertificados] = useState<File[]>([]);
-
-  const adicionarFormacao = () => {
-    setFormacoes([...formacoes, {
-      local: "",
-      nome: "",
-      descricao: "",
-      duracao: "",
-      dataInicio: undefined,
-      dataFim: undefined,
-    }]);
-  };
-
-  const removerFormacao = (index: number) => {
-    if (formacoes.length > 1) {
-      setFormacoes(formacoes.filter((_, i) => i !== index));
-    }
-  };
-
-  const adicionarExperiencia = () => {
-    setExperiencias([...experiencias, {
-      organizacao: "",
-      cargo: "",
-      descricao: "",
-      dataInicio: undefined,
-      dataFim: undefined,
-    }]);
-  };
-
-  const removerExperiencia = (index: number) => {
-    if (experiencias.length > 1) {
-      setExperiencias(experiencias.filter((_, i) => i !== index));
-    }
-  };
-
-  const adicionarIdioma = () => {
-    setIdiomas([...idiomas, { nome: "", fluencia: "" }]);
-  };
-
-  const removerIdioma = (index: number) => {
-    if (idiomas.length > 1) {
-      setIdiomas(idiomas.filter((_, i) => i !== index));
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      setCertificados(Array.from(files));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    try {
-      // Aqui você implementaria a lógica de submissão
-      console.log({
-        dadosPessoais,
-        formacoes,
-        experiencias,
-        idiomas,
-        certificados,
-      });
-      
-      // Simular envio
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      alert("Dados salvos com sucesso!");
-    } catch (error) {
-      console.error("Erro ao salvar dados:", error);
-      alert("Erro ao salvar dados. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const tabConfig = [
-    {
-      value: "pessoal",
-      label: "Dados Pessoais",
-      icon: User,
-      description: "Informações básicas do candidato"
-    },
-    {
-      value: "formacao",
-      label: "Formação",
-      icon: GraduationCap,
-      description: "Histórico acadêmico"
-    },
-    {
-      value: "experiencia",
-      label: "Experiência",
-      icon: Briefcase,
-      description: "Experiência profissional"
-    },
-    {
-      value: "idiomas",
-      label: "Idiomas",
-      icon: Languages,
-      description: "Línguas faladas"
-    },
-    {
-      value: "certificados",
-      label: "Certificados",
-      icon: Award,
-      description: "Documentos comprovativos"
-    },
+  const tabs = [
+    { id: 0, name: 'Dados Pessoais', icon: User },
+    { id: 1, name: 'Formação', icon: GraduationCap },
+    { id: 2, name: 'Experiência', icon: Briefcase },
+    { id: 3, name: 'Idiomas', icon: Languages },
+    { id: 4, name: 'Certificados', icon: Award }
   ];
 
+  const markTabComplete = (tabId: number) => {
+    if (!completedTabs.includes(tabId)) {
+      setCompletedTabs([...completedTabs, tabId]);
+    }
+  };
+
+  const handleNextTab = () => {
+    markTabComplete(activeTab);
+    if (activeTab < tabs.length - 1) {
+      setActiveTab(activeTab + 1);
+    }
+  };
+
+  // Handlers para Formação
+  const addFormation = () => {
+    if (formationForm.local && formationForm.nome && formationForm.dataInicio) {
+      setFormations([...formations, { ...formationForm, id: Date.now() }]);
+      setFormationForm({
+        local: '',
+        nome: '',
+        descricao: '',
+        duracao: '',
+        dataInicio: '',
+        dataFim: ''
+      });
+    }
+  };
+
+  const removeFormation = (id: number) => {
+    setFormations(formations.filter(f => f.id !== id));
+  };
+
+  // Handlers para Experiência
+  const addExperience = () => {
+    if (experienceForm.organizacao && experienceForm.cargo && experienceForm.dataInicio) {
+      setExperiences([...experiences, { ...experienceForm, id: Date.now() }]);
+      setExperienceForm({
+        organizacao: '',
+        cargo: '',
+        descricao: '',
+        dataInicio: '',
+        dataFim: ''
+      });
+    }
+  };
+
+  const removeExperience = (id: number) => {
+    setExperiences(experiences.filter(e => e.id !== id));
+  };
+
+  // Handlers para Idiomas
+  const addLanguage = () => {
+    if (languageForm.idIdioma && languageForm.fluencia) {
+      setLanguages([...languages, { ...languageForm, id: Date.now() }]);
+      setLanguageForm({ idIdioma: '', fluencia: '' });
+    }
+  };
+
+  const removeLanguage = (id: number) => {
+    setLanguages(languages.filter(l => l.id !== id));
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Perfil do Candidato
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] bg-clip-text text-transparent mb-2">
+            Complete seu Perfil
           </h1>
-          <p className="text-gray-600">
-            Complete o seu perfil para se destacar nas candidaturas
-          </p>
+          <p className="text-gray-600">Preencha suas informações para oportunidades incríveis</p>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            {/* Tabs List */}
-            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 gap-2 p-1 bg-slate-200/50 rounded-2xl">
-              {tabConfig.map((tab) => (
-                <TabsTrigger
-                  key={tab.value}
-                  value={tab.value}
-                  className="flex items-center gap-2 py-3 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-brand-main rounded-xl transition-all duration-200"
-                >
-                  <tab.icon className="w-4 h-4" />
-                  <span className="hidden sm:inline">{tab.label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            {/* Dados Pessoais */}
-            <TabsContent value="pessoal" className="space-y-4">
-              <Card className="border-0 shadow-lg">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-brand-main/10 rounded-lg">
-                      <User className="w-6 h-6 text-brand-main" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl text-gray-900">
-                        Dados Pessoais
-                      </CardTitle>
-                      <CardDescription>
-                        Informações básicas para o seu perfil
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="nome" className="text-sm font-medium">
-                        Nome *
-                      </Label>
-                      <Input
-                        id="nome"
-                        value={dadosPessoais.nome}
-                        onChange={(e) => setDadosPessoais({ ...dadosPessoais, nome: e.target.value })}
-                        placeholder="Seu nome"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="apelido" className="text-sm font-medium">
-                        Apelido *
-                      </Label>
-                      <Input
-                        id="apelido"
-                        value={dadosPessoais.apelido}
-                        onChange={(e) => setDadosPessoais({ ...dadosPessoais, apelido: e.target.value })}
-                        placeholder="Seu apelido"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-medium">
-                        Email *
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={dadosPessoais.email}
-                        onChange={(e) => setDadosPessoais({ ...dadosPessoais, email: e.target.value })}
-                        placeholder="seu@email.com"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="contacto" className="text-sm font-medium">
-                        Contacto *
-                      </Label>
-                      <Input
-                        id="contacto"
-                        value={dadosPessoais.contacto}
-                        onChange={(e) => setDadosPessoais({ ...dadosPessoais, contacto: e.target.value })}
-                        placeholder="+244 XXX XXX XXX"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="dataNascimento" className="text-sm font-medium">
-                        Data de Nascimento *
-                      </Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !dadosPessoais.dataNascimento && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {dadosPessoais.dataNascimento ? (
-                              format(dadosPessoais.dataNascimento, "PPP", { locale: pt })
-                            ) : (
-                              <span>Selecione a data</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={dadosPessoais.dataNascimento}
-                            onSelect={(date) => setDadosPessoais({ ...dadosPessoais, dataNascimento: date })}
-                            initialFocus
-                            locale={pt}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="genero" className="text-sm font-medium">
-                        Gênero *
-                      </Label>
-                      <Select
-                        value={dadosPessoais.genero}
-                        onValueChange={(value) => setDadosPessoais({ ...dadosPessoais, genero: value })}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o gênero" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="masculino">Masculino</SelectItem>
-                          <SelectItem value="feminino">Feminino</SelectItem>
-                          <SelectItem value="outro">Outro</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="provincia" className="text-sm font-medium">
-                        Província *
-                      </Label>
-                      <Input
-                        id="provincia"
-                        value={dadosPessoais.provincia}
-                        onChange={(e) => setDadosPessoais({ ...dadosPessoais, provincia: e.target.value })}
-                        placeholder="Sua província"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="morada" className="text-sm font-medium">
-                        Morada *
-                      </Label>
-                      <Input
-                        id="morada"
-                        value={dadosPessoais.morada}
-                        onChange={(e) => setDadosPessoais({ ...dadosPessoais, morada: e.target.value })}
-                        placeholder="Sua morada completa"
-                        required
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Formação Acadêmica */}
-            <TabsContent value="formacao" className="space-y-4">
-              <Card className="border-0 shadow-lg">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-brand-main/10 rounded-lg">
-                      <GraduationCap className="w-6 h-6 text-brand-main" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl text-gray-900">
-                        Formação Acadêmica
-                      </CardTitle>
-                      <CardDescription>
-                        Adicione sua formação académica e qualificações
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {formacoes.map((formacao, index) => (
-                    <div key={index} className="p-4 border border-gray-200 rounded-lg space-y-4">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-semibold text-brand-main">
-                          Formação #{index + 1}
-                        </h4>
-                        {formacoes.length > 1 && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removerFormacao(index)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Instituição *
-                          </Label>
-                          <Input
-                            value={formacao.local}
-                            onChange={(e) => {
-                              const novasFormacoes = [...formacoes];
-                              novasFormacoes[index].local = e.target.value;
-                              setFormacoes(novasFormacoes);
-                            }}
-                            placeholder="Nome da instituição"
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Curso/Formação *
-                          </Label>
-                          <Input
-                            value={formacao.nome}
-                            onChange={(e) => {
-                              const novasFormacoes = [...formacoes];
-                              novasFormacoes[index].nome = e.target.value;
-                              setFormacoes(novasFormacoes);
-                            }}
-                            placeholder="Nome do curso"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label className="text-sm font-medium">
-                          Descrição
-                        </Label>
-                        <Textarea
-                          value={formacao.descricao}
-                          onChange={(e) => {
-                            const novasFormacoes = [...formacoes];
-                            novasFormacoes[index].descricao = e.target.value;
-                            setFormacoes(novasFormacoes);
-                          }}
-                          placeholder="Descreva a sua formação..."
-                          rows={3}
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Data Início *
-                          </Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full justify-start text-left font-normal",
-                                  !formacao.dataInicio && "text-muted-foreground"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {formacao.dataInicio ? (
-                                  format(formacao.dataInicio, "MM/yyyy")
-                                ) : (
-                                  <span>Data início</span>
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={formacao.dataInicio}
-                                onSelect={(date) => {
-                                  const novasFormacoes = [...formacoes];
-                                  novasFormacoes[index].dataInicio = date;
-                                  setFormacoes(novasFormacoes);
-                                }}
-                                initialFocus
-                                locale={pt}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Data Fim
-                          </Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full justify-start text-left font-normal",
-                                  !formacao.dataFim && "text-muted-foreground"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {formacao.dataFim ? (
-                                  format(formacao.dataFim, "MM/yyyy")
-                                ) : (
-                                  <span>Data fim</span>
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={formacao.dataFim}
-                                onSelect={(date) => {
-                                  const novasFormacoes = [...formacoes];
-                                  novasFormacoes[index].dataFim = date;
-                                  setFormacoes(novasFormacoes);
-                                }}
-                                initialFocus
-                                locale={pt}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Duração
-                          </Label>
-                          <Input
-                            value={formacao.duracao}
-                            onChange={(e) => {
-                              const novasFormacoes = [...formacoes];
-                              novasFormacoes[index].duracao = e.target.value;
-                              setFormacoes(novasFormacoes);
-                            }}
-                            placeholder="ex: 3 anos"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={adicionarFormacao}
-                    className="w-full border-dashed border-2 border-brand-main/30 hover:border-brand-main hover:bg-brand-main/5 text-brand-main"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar Formação
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Experiência Profissional */}
-            <TabsContent value="experiencia" className="space-y-4">
-              <Card className="border-0 shadow-lg">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-brand-main/10 rounded-lg">
-                      <Briefcase className="w-6 h-6 text-brand-main" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl text-gray-900">
-                        Experiência Profissional
-                      </CardTitle>
-                      <CardDescription>
-                        Sua trajetória profissional e experiências anteriores
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {experiencias.map((experiencia, index) => (
-                    <div key={index} className="p-4 border border-gray-200 rounded-lg space-y-4">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-semibold text-brand-main">
-                          Experiência #{index + 1}
-                        </h4>
-                        {experiencias.length > 1 && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removerExperiencia(index)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Organização *
-                          </Label>
-                          <Input
-                            value={experiencia.organizacao}
-                            onChange={(e) => {
-                              const novasExperiencias = [...experiencias];
-                              novasExperiencias[index].organizacao = e.target.value;
-                              setExperiencias(novasExperiencias);
-                            }}
-                            placeholder="Nome da empresa/organização"
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Cargo *
-                          </Label>
-                          <Input
-                            value={experiencia.cargo}
-                            onChange={(e) => {
-                              const novasExperiencias = [...experiencias];
-                              novasExperiencias[index].cargo = e.target.value;
-                              setExperiencias(novasExperiencias);
-                            }}
-                            placeholder="Seu cargo/função"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label className="text-sm font-medium">
-                          Descrição *
-                        </Label>
-                        <Textarea
-                          value={experiencia.descricao}
-                          onChange={(e) => {
-                            const novasExperiencias = [...experiencias];
-                            novasExperiencias[index].descricao = e.target.value;
-                            setExperiencias(novasExperiencias);
-                          }}
-                          placeholder="Descreva suas responsabilidades e conquistas..."
-                          rows={3}
-                          required
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Data Início *
-                          </Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full justify-start text-left font-normal",
-                                  !experiencia.dataInicio && "text-muted-foreground"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {experiencia.dataInicio ? (
-                                  format(experiencia.dataInicio, "MM/yyyy")
-                                ) : (
-                                  <span>Data início</span>
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={experiencia.dataInicio}
-                                onSelect={(date) => {
-                                  const novasExperiencias = [...experiencias];
-                                  novasExperiencias[index].dataInicio = date;
-                                  setExperiencias(novasExperiencias);
-                                }}
-                                initialFocus
-                                locale={pt}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Data Fim
-                          </Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full justify-start text-left font-normal",
-                                  !experiencia.dataFim && "text-muted-foreground"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {experiencia.dataFim ? (
-                                  format(experiencia.dataFim, "MM/yyyy")
-                                ) : (
-                                  <span>Data fim (ou atual)</span>
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={experiencia.dataFim}
-                                onSelect={(date) => {
-                                  const novasExperiencias = [...experiencias];
-                                  novasExperiencias[index].dataFim = date;
-                                  setExperiencias(novasExperiencias);
-                                }}
-                                initialFocus
-                                locale={pt}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={adicionarExperiencia}
-                    className="w-full border-dashed border-2 border-brand-main/30 hover:border-brand-main hover:bg-brand-main/5 text-brand-main"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar Experiência
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Idiomas */}
-            <TabsContent value="idiomas" className="space-y-4">
-              <Card className="border-0 shadow-lg">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-brand-main/10 rounded-lg">
-                      <Languages className="w-6 h-6 text-brand-main" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl text-gray-900">
-                        Idiomas
-                      </CardTitle>
-                      <CardDescription>
-                        Idiomas que domina e nível de fluência
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {idiomas.map((idioma, index) => (
-                    <div key={index} className="p-4 border border-gray-200 rounded-lg">
-                      <div className="flex justify-between items-center mb-4">
-                        <h4 className="font-semibold text-brand-main">
-                          Idioma #{index + 1}
-                        </h4>
-                        {idiomas.length > 1 && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removerIdioma(index)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Idioma *
-                          </Label>
-                          <Input
-                            value={idioma.nome}
-                            onChange={(e) => {
-                              const novosIdiomas = [...idiomas];
-                              novosIdiomas[index].nome = e.target.value;
-                              setIdiomas(novosIdiomas);
-                            }}
-                            placeholder="ex: Inglês, Francês, etc."
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Fluência *
-                          </Label>
-                          <Select
-                            value={idioma.fluencia}
-                            onValueChange={(value) => {
-                              const novosIdiomas = [...idiomas];
-                              novosIdiomas[index].fluencia = value;
-                              setIdiomas(novosIdiomas);
-                            }}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Nível de fluência" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="basico">Básico</SelectItem>
-                              <SelectItem value="intermedio">Intermediário</SelectItem>
-                              <SelectItem value="avancado">Avançado</SelectItem>
-                              <SelectItem value="fluente">Fluente</SelectItem>
-                              <SelectItem value="nativo">Nativo</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={adicionarIdioma}
-                    className="w-full border-dashed border-2 border-brand-main/30 hover:border-brand-main hover:bg-brand-main/5 text-brand-main"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar Idioma
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Certificados */}
-            <TabsContent value="certificados" className="space-y-4">
-              <Card className="border-0 shadow-lg">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-brand-main/10 rounded-lg">
-                      <Award className="w-6 h-6 text-brand-main" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl text-gray-900">
-                        Certificados
-                      </CardTitle>
-                      <CardDescription>
-                        Faça upload dos seus certificados e documentos comprovativos
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-main transition-colors">
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Upload de Certificados
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      Faça upload dos seus certificados, diplomas e outros documentos comprovativos
-                    </p>
-                    <Input
-                      type="file"
-                      multiple
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={handleFileChange}
-                      className="hidden"
-                      id="certificados"
-                    />
-                    <Label
-                      htmlFor="certificados"
-                      className="cursor-pointer inline-flex items-center gap-2 px-6 py-3 bg-brand-main text-white rounded-lg hover:bg-brand-main/90 transition-colors"
-                    >
-                      <Upload className="w-4 h-4" />
-                      Selecionar Ficheiros
-                    </Label>
-                    <p className="text-sm text-gray-500 mt-3">
-                      Formatos suportados: PDF, JPG, PNG (Máx. 10MB por ficheiro)
-                    </p>
-                  </div>
-
-                  {certificados.length > 0 && (
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-gray-900">
-                        Ficheiros Selecionados ({certificados.length})
-                      </h4>
-                      {certificados.map((file, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Award className="w-5 h-5 text-brand-main" />
-                            <span className="text-sm font-medium">{file.name}</span>
-                          </div>
-                          <span className="text-xs text-gray-500">
-                            {(file.size / (1024 * 1024)).toFixed(2)} MB
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-
-          {/* Actions */}
-          <div className="flex justify-between items-center pt-6 border-t border-gray-200">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => window.history.back()}
-              className="text-gray-700 hover:text-gray-900"
-            >
-              Voltar
-            </Button>
-            
-            <div className="flex gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  // Limpar formulário
-                  setDadosPessoais({
-                    nome: "",
-                    apelido: "",
-                    email: "",
-                    contacto: "",
-                    whatsapp: "",
-                    dataNascimento: undefined,
-                    provincia: "",
-                    morada: "",
-                    numeroBi: "",
-                    nivelAcademico: "",
-                    genero: "",
-                    idiomaNativo: "",
-                  });
-                  setFormacoes([{
-                    local: "",
-                    nome: "",
-                    descricao: "",
-                    duracao: "",
-                    dataInicio: undefined,
-                    dataFim: undefined,
-                  }]);
-                  setExperiencias([{
-                    organizacao: "",
-                    cargo: "",
-                    descricao: "",
-                    dataInicio: undefined,
-                    dataFim: undefined,
-                  }]);
-                  setIdiomas([{ nome: "", fluencia: "" }]);
-                  setCertificados([]);
-                }}
-              >
-                Limpar
-              </Button>
+        {/* Tabs Navigation */}
+        <div className="bg-white rounded-2xl shadow-lg mb-6 p-4">
+          <div className="flex overflow-x-auto gap-2 pb-2">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              const isCompleted = completedTabs.includes(tab.id);
               
-              <Button
-                type="submit"
-                disabled={loading}
-                className="bg-brand-main hover:bg-brand-main/90 text-white px-8"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    A Guardar...
-                  </>
-                ) : (
-                  "Guardar Perfil"
-                )}
-              </Button>
-            </div>
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all whitespace-nowrap ${
+                    isActive
+                      ? 'bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] text-white shadow-lg scale-105'
+                      : isCompleted
+                      ? 'bg-green-50 text-green-600 hover:bg-green-100'
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <Icon size={20} />
+                  <span>{tab.name}</span>
+                  {isCompleted && !isActive && <CheckCircle size={16} />}
+                </button>
+              );
+            })}
           </div>
-        </form>
+        </div>
+
+        {/* Tab Content */}
+        <div className="bg-white rounded-2xl shadow-lg p-8">
+          {/* Tab 0: Dados Pessoais */}
+          {activeTab === 0 && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Dados Pessoais</h2>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Província</label>
+                  <input
+                    type="text"
+                    value={personalData.provincia}
+                    onChange={(e) => setPersonalData({...personalData, provincia: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Ex: Maputo"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Morada</label>
+                  <input
+                    type="text"
+                    value={personalData.morada}
+                    onChange={(e) => setPersonalData({...personalData, morada: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Endereço completo"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Data de Nascimento</label>
+                  <input
+                    type="date"
+                    value={personalData.dataNascimento}
+                    onChange={(e) => setPersonalData({...personalData, dataNascimento: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Documento</label>
+                  <select
+                    value={personalData.tipoDocumento}
+                    onChange={(e) => setPersonalData({...personalData, tipoDocumento: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                  >
+                    <option value="">Selecione</option>
+                    <option value="BI">BI</option>
+                    <option value="Passaporte">Passaporte</option>
+                    <option value="DIRE">DIRE</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Número do BI</label>
+                  <input
+                    type="text"
+                    value={personalData.numeroBi}
+                    onChange={(e) => setPersonalData({...personalData, numeroBi: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="000000000X"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Gênero</label>
+                  <select
+                    value={personalData.genero}
+                    onChange={(e) => setPersonalData({...personalData, genero: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                  >
+                    <option value="">Selecione</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Nível Acadêmico</label>
+                  <select
+                    value={personalData.nivelAcademico}
+                    onChange={(e) => setPersonalData({...personalData, nivelAcademico: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                  >
+                    <option value="">Selecione</option>
+                    <option value="Ensino Básico">Ensino Básico</option>
+                    <option value="Ensino Médio">Ensino Médio</option>
+                    <option value="Licenciatura">Licenciatura</option>
+                    <option value="Mestrado">Mestrado</option>
+                    <option value="Doutorado">Doutorado</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Contacto</label>
+                  <input
+                    type="tel"
+                    value={personalData.contacto}
+                    onChange={(e) => setPersonalData({...personalData, contacto: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="+258 84 000 0000"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp</label>
+                  <input
+                    type="tel"
+                    value={personalData.whatsapp}
+                    onChange={(e) => setPersonalData({...personalData, whatsapp: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="+258 84 000 0000"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Idioma Nativo</label>
+                  <input
+                    type="text"
+                    value={personalData.idiomaNativo}
+                    onChange={(e) => setPersonalData({...personalData, idiomaNativo: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Ex: Português"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                <input
+                  type="checkbox"
+                  id="isFromUnitec"
+                  checked={personalData.isFromUnitec}
+                  onChange={(e) => setPersonalData({...personalData, isFromUnitec: e.target.checked})}
+                  className="w-5 h-5 text-[var(--brand-main)] rounded focus:ring-2 focus:ring-[var(--brand-main)]"
+                />
+                <label htmlFor="isFromUnitec" className="text-gray-700 font-medium">
+                  Sou estudante da UNITEC
+                </label>
+              </div>
+            </div>
+          )}
+
+          {/* Tab 1: Formação */}
+          {activeTab === 1 && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Formação Acadêmica</h2>
+              
+              <div className="bg-gradient-to-r from-[var(--brand-main)]/10 to-[var(--brand-lime)]/10 p-6 rounded-xl mb-6">
+                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <Plus size={20} />
+                  Adicionar Formação
+                </h3>
+                
+                <div className="grid md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    value={formationForm.local}
+                    onChange={(e) => setFormationForm({...formationForm, local: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Instituição"
+                  />
+                  
+                  <input
+                    type="text"
+                    value={formationForm.nome}
+                    onChange={(e) => setFormationForm({...formationForm, nome: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Nome do Curso"
+                  />
+                  
+                  <input
+                    type="text"
+                    value={formationForm.duracao}
+                    onChange={(e) => setFormationForm({...formationForm, duracao: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Duração (ex: 4 anos)"
+                  />
+                  
+                  <input
+                    type="date"
+                    value={formationForm.dataInicio}
+                    onChange={(e) => setFormationForm({...formationForm, dataInicio: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Data Início"
+                  />
+                  
+                  <input
+                    type="date"
+                    value={formationForm.dataFim}
+                    onChange={(e) => setFormationForm({...formationForm, dataFim: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Data Fim"
+                  />
+                  
+                  <textarea
+                    value={formationForm.descricao}
+                    onChange={(e) => setFormationForm({...formationForm, descricao: e.target.value})}
+                    className="md:col-span-2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Descrição"
+                    rows={3}
+                  />
+                </div>
+                
+                <button
+                  onClick={addFormation}
+                  className="mt-4 px-6 py-3 bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+                >
+                  <Plus size={20} />
+                  Adicionar Formação
+                </button>
+              </div>
+
+              {/* Lista de Formações */}
+              <div className="space-y-4">
+                {formations.map((formation) => (
+                  <div key={formation.id} className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-semibold text-gray-800">{formation.nome}</h4>
+                        <p className="text-sm text-gray-600">{formation.local}</p>
+                        <p className="text-sm text-gray-500 mt-1">{formation.duracao} | {formation.dataInicio}</p>
+                      </div>
+                      <button
+                        onClick={() => removeFormation(formation.id)}
+                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tab 2: Experiência */}
+          {activeTab === 2 && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Experiência Profissional</h2>
+              
+              <div className="bg-gradient-to-r from-[var(--brand-main)]/10 to-[var(--brand-lime)]/10 p-6 rounded-xl mb-6">
+                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <Plus size={20} />
+                  Adicionar Experiência
+                </h3>
+                
+                <div className="grid md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    value={experienceForm.organizacao}
+                    onChange={(e) => setExperienceForm({...experienceForm, organizacao: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Empresa/Organização"
+                  />
+                  
+                  <input
+                    type="text"
+                    value={experienceForm.cargo}
+                    onChange={(e) => setExperienceForm({...experienceForm, cargo: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Cargo"
+                  />
+                  
+                  <input
+                    type="date"
+                    value={experienceForm.dataInicio}
+                    onChange={(e) => setExperienceForm({...experienceForm, dataInicio: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                  />
+                  
+                  <input
+                    type="date"
+                    value={experienceForm.dataFim}
+                    onChange={(e) => setExperienceForm({...experienceForm, dataFim: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                  />
+                  
+                  <textarea
+                    value={experienceForm.descricao}
+                    onChange={(e) => setExperienceForm({...experienceForm, descricao: e.target.value})}
+                    className="md:col-span-2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Descrição das atividades"
+                    rows={3}
+                  />
+                </div>
+                
+                <button
+                  onClick={addExperience}
+                  className="mt-4 px-6 py-3 bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+                >
+                  <Plus size={20} />
+                  Adicionar Experiência
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {experiences.map((exp) => (
+                  <div key={exp.id} className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-semibold text-gray-800">{exp.cargo}</h4>
+                        <p className="text-sm text-gray-600">{exp.organizacao}</p>
+                        <p className="text-sm text-gray-500 mt-1">{exp.dataInicio} - {exp.dataFim || 'Presente'}</p>
+                      </div>
+                      <button
+                        onClick={() => removeExperience(exp.id)}
+                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tab 3: Idiomas */}
+          {activeTab === 3 && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Idiomas</h2>
+              
+              <div className="bg-gradient-to-r from-[var(--brand-main)]/10 to-[var(--brand-lime)]/10 p-6 rounded-xl mb-6">
+                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <Plus size={20} />
+                  Adicionar Idioma
+                </h3>
+                
+                <div className="grid md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    value={languageForm.idIdioma}
+                    onChange={(e) => setLanguageForm({...languageForm, idIdioma: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                    placeholder="Idioma (ex: Inglês)"
+                  />
+                  
+                  <select
+                    value={languageForm.fluencia}
+                    onChange={(e) => setLanguageForm({...languageForm, fluencia: e.target.value})}
+                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-main)] focus:border-transparent"
+                  >
+                    <option value="">Selecione a fluência</option>
+                    <option value="Básico">Básico</option>
+                    <option value="Intermediário">Intermediário</option>
+                    <option value="Avançado">Avançado</option>
+                    <option value="Fluente">Fluente</option>
+                    <option value="Nativo">Nativo</option>
+                  </select>
+                </div>
+                
+                <button
+                  onClick={addLanguage}
+                  className="mt-4 px-6 py-3 bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+                >
+                  <Plus size={20} />
+                  Adicionar Idioma
+                </button>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {languages.map((lang) => (
+                  <div key={lang.id} className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all flex justify-between items-center">
+                    <div>
+                      <h4 className="font-semibold text-gray-800">{lang.idIdioma}</h4>
+                      <p className="text-sm text-gray-600">{lang.fluencia}</p>
+                    </div>
+                    <button
+                      onClick={() => removeLanguage(lang.id)}
+                      className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tab 4: Certificados */}
+          {activeTab === 4 && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Certificados</h2>
+              
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-[var(--brand-main)] transition-all cursor-pointer">
+                <Award size={48} className="mx-auto text-gray-400 mb-4" />
+                <p className="text-gray-600 mb-2">Arraste seus certificados aqui ou clique para selecionar</p>
+                <p className="text-sm text-gray-500">Formatos aceitos: PDF, JPG, PNG</p>
+                <button className="mt-4 px-6 py-3 bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] text-white rounded-lg hover:shadow-lg transition-all">
+                  Selecionar Arquivos
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation Buttons */}
+          <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
+            <button
+              onClick={() => setActiveTab(Math.max(0, activeTab - 1))}
+              disabled={activeTab === 0}
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Anterior
+            </button>
+            
+            {activeTab === tabs.length - 1 ? (
+              <button
+                onClick={() => {
+                  markTabComplete(activeTab);
+                  alert('Perfil completo! 🎉');
+                }}
+                className="px-8 py-3 bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <Save size={20} />
+                Salvar Perfil
+              </button>
+            ) : (
+              <button
+                onClick={handleNextTab}
+                className="px-6 py-3 bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                Próximo
+                <ChevronRight size={20} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Progress Indicator */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            {completedTabs.length} de {tabs.length} seções completas
+          </p>
+          <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden max-w-md mx-auto">
+            <div
+              className="h-full bg-gradient-to-r from-[var(--brand-main)] to-[var(--brand-lime)] transition-all duration-500"
+              style={{ width: `${(completedTabs.length / tabs.length) * 100}%` }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

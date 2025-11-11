@@ -29,4 +29,5 @@ export const routes = {
   Adicionarcertificado: `${API_BASE_URL}/adicionar-certificado`,
   pagamentoscandidato: `${API_BASE_URL}/pagamentos-candidato`,
   adicionarquestao: `${API_BASE_URL}/adicionar-questao`,
+  idioma_candidato: `${API_BASE_URL}/idioma-candidato`,
 };

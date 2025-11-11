@@ -20,10 +20,10 @@ export default function Idiomas() {
 
   // Agora no formato {label, value}
   const niveisProficiencia = [
-    { label: "Básico", value: "Basico" },
-    { label: "Intermédiario", value: "Intermediario" },
-    { label: "Avançado", value: "Avancado" },
-    { label: "Fluente", value: "Fluente" },
+    { label: "Básico", value: "basico" },
+    { label: "Intermédiario", value: "intermediario" },
+    { label: "Avançado", value: "avancado" },
+    { label: "Fluente", value: "fluente" },
   ];
 
   useEffect(() => {

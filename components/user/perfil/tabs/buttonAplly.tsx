@@ -1,33 +1,78 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
-
+import { GraduationCap, CreditCard } from "lucide-react";
+import ModalPagamentoGraduacao from "../../../DadosGraduacao/ModalPagamentoGraduacao";
 interface ApplyButtonProps {
   isEnabled: boolean;
-  href: string;
   onClick?: () => void;
-
+  href?: string;
 }
 
-export default function ApplyButton({ isEnabled, href }: ApplyButtonProps) {
+export default function ApplyButton({ isEnabled, onClick, href }: ApplyButtonProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleClick = () => {
+    if (isEnabled) {
+      setIsModalOpen(true);
+      onClick?.();
+    }
+  };
+
+  const handleSuccess = () => {
+    // Redirecionar para cursos após pagamento bem-sucedido
+    if (href) {
+      window.location.href = href;
+    }
+  };
+
   return (
-    <Link href={href} className="w-full md:w-auto">
+    <>
       <motion.button
-        type="button"
+        onClick={handleClick}
         disabled={!isEnabled}
-        whileHover={{ scale: isEnabled ? 1.03 : 1 }}
-        whileTap={{ scale: isEnabled ? 0.97 : 1 }}
-        className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white shadow-md transition-all w-full md:w-auto ${
-          isEnabled
-            ? "bg-brand-lime hover:bg-brand-lime/90"
-            : "bg-gray-400 cursor-not-allowed"
-        }`}
+        className={`
+          relative px-5 py-4 rounded-2xl font-bold text-lg
+          transition-all duration-300 transform
+          flex items-center justify-center space-x-3
+          min-w-[200px]
+          ${isEnabled
+            ? "bg-brand-lime text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+            : "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+          }
+        `}
+        whileHover={isEnabled ? { scale: 1.05 } : {}}
+        whileTap={isEnabled ? { scale: 0.95 } : {}}
       >
-        <Plus className="w-4 h-4" />
-        Candidatar-se
+        {isEnabled ? (
+          <>
+            <CreditCard size={24} />
+            <span>Pagar Graduação</span>
+          </>
+        ) : (
+          <>
+            <GraduationCap size={24} />
+            <span>Completar Perfil</span>
+          </>
+        )}
+        
+        {/* Efeito de brilho no hover */}
+        {isEnabled && (
+          <motion.div
+            className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/20 to-transparent"
+            initial={{ opacity: 0 }}
+            whileHover={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          />
+        )}
       </motion.button>
-    </Link>
+
+      <ModalPagamentoGraduacao
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleSuccess}
+      />
+    </>
   );
 }

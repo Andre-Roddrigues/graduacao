@@ -558,7 +558,7 @@ const hasCertificadoValido = certificados.some(
         </div>
 
         {/* Checkbox Unitec */}
-        <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border">
+        {/* <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border">
           <input
             type="checkbox"
             checked={data.isFromUnitec}
@@ -567,12 +567,11 @@ const hasCertificadoValido = certificados.some(
             className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
           />
           <label className="text-sm font-medium">Frequentou algum curso na Unitec?</label>
-        </div>
+        </div> */}
 
         {/* Upload de certificado */}
-        {isClient && data.isFromUnitec && isEditing && (
+        {/* {isClient && data.isFromUnitec && isEditing && (
   <div className="flex flex-col gap-4 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl border border-blue-200 dark:border-gray-600 shadow-sm hover:shadow-md transition-all duration-300">
-    {/* Header */}
     <div className="flex items-center gap-3">
       <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
         <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -585,7 +584,6 @@ const hasCertificadoValido = certificados.some(
       </div>
     </div>
 
-    {/* Upload Area */}
     <label className="relative cursor-pointer group">
       <input
         type="file"
@@ -606,7 +604,6 @@ const hasCertificadoValido = certificados.some(
       </div>
     </label>
 
-    {/* File Preview */}
     {certificadoFile && (
       <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg animate-in fade-in duration-300">
         <div className="flex items-center gap-3">
@@ -636,7 +633,6 @@ const hasCertificadoValido = certificados.some(
       </div>
     )}
 
-    {/* Help Text */}
     <div className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
       <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -644,7 +640,7 @@ const hasCertificadoValido = certificados.some(
       <p>Documentos (PDF, DOC, DOCX) e imagens (JPG, PNG, WEBP) são aceitos. O certificado será associado ao seu perfil após a validação pela nossa equipe.</p>
     </div>
   </div>
-)}
+)} */}
 
         {/* Botão salvar */}
         <div className="pt-4 flex flex-col md:flex-row justify-end gap-3">

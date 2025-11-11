@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import UnitecFooterNew from "./../../../public/images/UnitecFooterNew.png"
-import PrivacyPolicyModal from "./politicadeprovacidade";
+// import PrivacyPolicyModal from "./politicadeprovacidade";
 
 export default function Footer() {
   return (
@@ -88,12 +88,12 @@ export default function Footer() {
                 &copy; {new Date().getFullYear()} Unitec. Todos os direitos reservados.
               </p>
               <div className="flex space-x-6">
-                <PrivacyPolicyModal />
+                {/* <PrivacyPolicyModal /> */}
               </div>
               <div className="flex space-x-6">
-                <Link href="/nossos-termos" target="_blank" className="text-gray-500 hover:text-white text-sm transition-colors duration-300 hover:underline underline-offset-2">
+                {/* <Link href="/nossos-termos" target="_blank" className="text-gray-500 hover:text-white text-sm transition-colors duration-300 hover:underline underline-offset-2">
                   Termos e Condições
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function Footer() {
           
           {/* Services */}
           <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-4 text-gray-200">Ecossistema</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-200">Plataformas</h3>
             <ul className="space-y-3">
               <li>
                 <Link 
@@ -165,11 +165,11 @@ export default function Footer() {
               </li>
               <li>
                 <Link 
-                  href="https://unitec.ac.mz/language" 
+                  href="https://promet.unitec.ac.mz" 
                   className="text-gray-400 hover:text-blue-300 transition-colors duration-300 flex items-center py-1"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                  Unitec Language
+                  PROMET
                 </Link>
               </li>
               <li>
@@ -198,7 +198,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center transition-colors duration-300 hover:text-blue-300 text-gray-400">
                 <span className="text-blue-400 mr-3"><Mail className="w-4 h-4" /></span>
-                <span>promet@unitec.ac.mz</span>
+                <span>info@unitec.ac.mz</span>
               </li>
               <li className="flex items-center transition-colors duration-300 hover:text-green-400 text-gray-400">
                   <a 
@@ -231,12 +231,12 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Unitec. Todos os direitos reservados.
           </p>
           <div className="flex">
-            <PrivacyPolicyModal />
+            {/* <PrivacyPolicyModal /> */}
           </div>
           <div className="flex">
-            <Link href="/nossos-termos" target="_blank" className="text-gray-500 hover:text-white text-sm transition-colors duration-300 hover:underline underline-offset-2">
+            {/* <Link href="/nossos-termos" target="_blank" className="text-gray-500 hover:text-white text-sm transition-colors duration-300 hover:underline underline-offset-2">
                   Termos e Condições
-                </Link>
+                </Link> */}
           </div>
         </div>
       </div>

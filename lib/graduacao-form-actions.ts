@@ -193,7 +193,7 @@ export type ApiResponse<T = any> = {
   error?: string;
 };
 
-const API_URL = routes.backend_url_promet;
+const API_URL = routes.backend_url;
 
 // Função para recuperar o token e montar os headers
 async function authHeaders() {
