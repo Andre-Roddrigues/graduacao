@@ -74,7 +74,7 @@ export default function CTAGraduacao() {
 // Componente de Contagem Regressiva Compacta (para o logo)
 function CompactCountdown() {
     const calculateTimeLeft = () => {
-        const targetDate = new Date('2025-12-31T23:59:59');
+        const targetDate = new Date('2025-11-28T23:59:59');
         const now = new Date();
         const difference = targetDate.getTime() - now.getTime();
 
