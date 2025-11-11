@@ -1,0 +1,556 @@
+"use client";
+import { useState, useMemo, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Eye, EyeOff, User, Mail, Lock, UserPlus, RefreshCcw, UserCircle, Phone } from "lucide-react";
+import { registerUser } from "../../lib/register-user-actions";
+import { toast, Toaster } from "react-hot-toast";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import GoogleLoginButton from "../common/google-login-button";
+
+type PasswordStrength = {
+  strength: number;
+  label: string;
+  color: string;
+  width: string;
+};
+
+type FieldErrors = {
+  nome: boolean;
+  apelido: boolean;
+  contacto: boolean;
+};
+
+const FloatingShapes = () => (
+  <div className="absolute dark:bg-gray-900/90 inset-0 overflow-hidden pointer-events-none opacity-30">
+    {/* SVG animados */}
+    <motion.div
+      initial={{ x: -100, y: -100, rotate: 0 }}
+      animate={{ x: ["-10%", "10%", "-10%"], y: ["-10%", "5%", "-10%"], rotate: 360 }}
+      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+      className="absolute top-20 left-20"
+    >
+      <svg width="60" height="60" viewBox="0 0 60 60" className="text-brand-main/15">
+        <circle cx="30" cy="30" r="25" fill="currentColor" />
+      </svg>
+    </motion.div>
+
+    <motion.div
+      initial={{ x: 200, y: 300, rotate: 0 }}
+      animate={{ x: ["15%", "5%", "15%"], y: ["25%", "35%", "25%"], rotate: -360 }}
+      transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      className="absolute bottom-40 right-40"
+    >
+      <svg width="40" height="40" viewBox="0 0 40 40" className="text-brand-lime/15">
+        <circle cx="20" cy="20" r="15" fill="currentColor" />
+      </svg>
+    </motion.div>
+
+    <motion.div
+      initial={{ x: 300, y: 100, rotate: 0 }}
+      animate={{ x: ["25%", "15%", "25%"], y: ["10%", "20%", "10%"], rotate: 180 }}
+      transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+      className="absolute top-60 right-20"
+    >
+      <svg width="50" height="50" viewBox="0 0 50 50" className="text-brand-main/10">
+        <polygon points="25,5 45,40 5,40" fill="currentColor" />
+      </svg>
+    </motion.div>
+  </div>
+);
+
+export default function RegisterForm() {
+  const router = useRouter();
+
+  const [form, setForm] = useState({
+    nome: "",
+    apelido: "",
+    email: "",
+    contacto: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({
+    nome: false,
+    apelido: false,
+    contacto: false,
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [usernameEdited, setUsernameEdited] = useState(false);
+
+  // Remove acentos e espaços, gera username
+  const generateUsername = (nome: string, apelido: string) => {
+    if (!nome || !apelido) return "";
+    const randomNumbers = Math.floor(1000 + Math.random() * 9000);
+
+    // Normalizar e remover acentos
+    const clean = (str: string) =>
+      str
+        .normalize("NFD") // separa letras de acentos
+        .replace(/[\u0300-\u036f]/g, "") // remove acentos
+        .replace(/\s+/g, ""); // remove espaços
+
+    return `${clean(nome)}${clean(apelido)}${randomNumbers}`.toLowerCase();
+  };
+
+  useEffect(() => {
+    if (form.nome && form.apelido && !usernameEdited) {
+      setForm((prev) => ({
+        ...prev,
+        username: generateUsername(form.nome, form.apelido),
+      }));
+    }
+  }, [form.nome, form.apelido, usernameEdited]);
+
+  // Função para validar se contém apenas letras (incluindo acentuadas e espaços)
+  const containsOnlyLetters = (text: string): boolean => {
+    return /^[A-Za-zÀ-ÿ\s]+$/.test(text);
+  };
+
+  // Função para validar o contacto
+  const isValidContact = (contact: string): boolean => {
+    // Remove espaços e outros caracteres não numéricos
+    const cleanContact = contact.replace(/\D/g, '');
+    
+    // Verifica se contém apenas números e se começa com os prefixos permitidos
+    const validPrefixes = ['84', '87', '86', '82', '83', '85'];
+    const hasValidPrefix = validPrefixes.some(prefix => cleanContact.startsWith(prefix));
+    
+    return /^\d+$/.test(contact.replace(/\s/g, '')) && hasValidPrefix;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    
+    // Validação em tempo real
+    if (name === "nome" || name === "apelido") {
+      const isValid = containsOnlyLetters(value);
+      setFieldErrors(prev => ({ ...prev, [name]: !isValid }));
+    }
+    
+    if (name === "contacto") {
+      const isValid = isValidContact(value);
+      setFieldErrors(prev => ({ ...prev, [name]: !isValid }));
+    }
+
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "username") setUsernameEdited(true);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    
+    // Validação no blur para campos que podem estar vazios
+    if (name === "nome" && value) {
+      setFieldErrors(prev => ({ ...prev, [name]: !containsOnlyLetters(value) }));
+    }
+    
+    if (name === "apelido" && value) {
+      setFieldErrors(prev => ({ ...prev, [name]: !containsOnlyLetters(value) }));
+    }
+    
+    if (name === "contacto" && value) {
+      setFieldErrors(prev => ({ ...prev, [name]: !isValidContact(value) }));
+    }
+  };
+
+  const passwordStrength: PasswordStrength = useMemo(() => {
+    if (!form.password)
+      return { strength: 0, label: "Muito Fraca", color: "bg-red-400", width: "w-0" };
+    let strength = 0;
+    if (form.password.length >= 8) strength += 1;
+    if (/[A-Z]/.test(form.password)) strength += 1;
+    if (/[0-9]/.test(form.password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(form.password)) strength += 1;
+
+    const strengths: PasswordStrength[] = [
+      { strength: 0, label: "Muito Fraca", color: "bg-red-400", width: "w-1/5" },
+      { strength: 1, label: "Fraca", color: "bg-orange-500", width: "w-2/5" },
+      { strength: 2, label: "Média", color: "bg-yellow-400", width: "w-3/5" },
+      { strength: 3, label: "Forte", color: "bg-green-400", width: "w-4/5" },
+      { strength: 4, label: "Muito Forte", color: "bg-brand-main", width: "w-full" },
+    ];
+
+    return strengths[Math.min(strength, 4)];
+  }, [form.password]);
+
+  const passwordsMatch = useMemo(
+    () => form.password === form.confirmPassword,
+    [form.password, form.confirmPassword]
+  );
+
+  const isFormValid = useMemo(() => {
+    const fieldsFilled = 
+      form.nome.trim() &&
+      form.apelido.trim() &&
+      form.email.trim() &&
+      form.contacto.trim() &&
+      form.username.trim() &&
+      form.password.trim() &&
+      form.confirmPassword.trim();
+    
+    const fieldsValid = 
+      !fieldErrors.nome && 
+      !fieldErrors.apelido && 
+      !fieldErrors.contacto;
+
+    return fieldsFilled && fieldsValid && passwordsMatch && acceptedTerms;
+  }, [form, acceptedTerms, passwordsMatch, fieldErrors]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isFormValid) return;
+
+    setLoading(true);
+    try {
+      const { confirmPassword, ...userData } = form;
+
+      // username sem acentos antes de enviar
+      const sanitizedUserData = {
+        ...userData,
+        username: userData.username
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/\s+/g, ""),
+      };
+
+      const result = await registerUser(sanitizedUserData);
+
+      if (!result.success) {
+        toast.error(result.message || "Erro ao criar conta.");
+        return;
+      }
+
+      toast.success(result.message || "Conta criada com sucesso!");
+
+      setForm({
+        nome: "",
+        apelido: "",
+        email: "",
+        contacto: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setAcceptedTerms(false);
+      setUsernameEdited(false);
+      setFieldErrors({
+        nome: false,
+        apelido: false,
+        contacto: false,
+      });
+
+      setTimeout(() => router.push("/login"), 1000);
+    } catch (error: any) {
+      toast.error(error.message || "Erro inesperado ao criar conta.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Toaster position="top-center" />
+      <div className="flex items-center justify-center py-8 p-4 relative dark:bg-gray-700/50 bg-slate-50 overflow-hidden min-h-screen">
+        <FloatingShapes />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.5, type: "spring" }}
+          className="relative z-10 flex w-full max-w-4xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 dark:bg-gray-900/90 dark:border-gray-700/50 overflow-hidden"
+        >
+          {/* Lado esquerdo */}
+          <div className="hidden md:flex flex-1 relative">
+            <Image
+              src="/images/reg.jpg"
+              alt="Cadastro"
+              width={600}
+              height={800}
+              className="w-full object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-main/70 to-brand-lime/70 mix-blend-multiply" />
+          </div>
+
+          {/* Lado direito - Formulário */}
+          <div className="flex-1 p-5 md:p-6">
+            <div className="text-center mb-5">
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ delay: 0.2, type: "spring" }}
+                className="w-12 h-12 bg-gradient-to-r from-brand-main to-brand-lime rounded-full flex items-center justify-center mx-auto mb-2"
+              >
+                <UserPlus className="w-6 h-6 text-white" />
+              </motion.div>
+              <h1 className="text-xl font-bold text-gray-800 dark:text-white mb-1">
+                Criar Conta
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                Preencha seus dados para começar
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-3">
+              {/* Nome e Apelido */}
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label htmlFor="nome" className="sr-only">
+                    Nome
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      id="nome"
+                      type="text"
+                      name="nome"
+                      placeholder="Nome"
+                      value={form.nome}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-brand-main/30 focus:border-brand-main/20 transition-all dark:bg-gray-800 dark:text-white ${
+                        fieldErrors.nome 
+                          ? 'border-red-500 bg-red-50 dark:bg-red-900/20' 
+                          : 'border-gray-200 dark:border-gray-700'
+                      }`}
+                      required
+                    />
+                  </div>
+                  {fieldErrors.nome && (
+                    <p className="text-xs text-red-500 mt-1">Apenas letras são permitidas</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="apelido" className="sr-only">
+                    Apelido
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      id="apelido"
+                      type="text"
+                      name="apelido"
+                      placeholder="Apelido"
+                      value={form.apelido}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-brand-main/30 focus:border-brand-main/20 transition-all dark:bg-gray-800 dark:text-white ${
+                        fieldErrors.apelido 
+                          ? 'border-red-500 bg-red-50 dark:bg-red-900/20' 
+                          : 'border-gray-200 dark:border-gray-700'
+                      }`}
+                      required
+                    />
+                  </div>
+                  {fieldErrors.apelido && (
+                    <p className="text-xs text-red-500 mt-1">Apenas letras são permitidas</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Email */}
+              <div>
+                <label htmlFor="email" className="sr-only">
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={form.email}
+                    onChange={handleChange}
+                    className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-brand-main/30 focus:border-brand-main/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Contacto */}
+              <div>
+                <label htmlFor="contacto" className="sr-only">
+                  Contacto
+                </label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    id="contacto"
+                    type="text"
+                    name="contacto"
+                    placeholder="Contacto (ex: 84...)"
+                    value={form.contacto}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-brand-main/30 focus:border-brand-main/20 transition-all dark:bg-gray-800 dark:text-white ${
+                      fieldErrors.contacto 
+                        ? 'border-red-500 bg-red-50 dark:bg-red-900/20' 
+                        : 'border-gray-200 dark:border-gray-700'
+                    }`}
+                    required
+                  />
+                </div>
+                {fieldErrors.contacto && (
+                  <p className="text-xs text-red-500 mt-1">
+                    Apenas números são permitidos e deve começar com 84, 87, 86, 82, 83 ou 85
+                  </p>
+                )}
+              </div>
+
+              {/* Username */}
+              <div>
+                <label htmlFor="username" className="sr-only">
+                  Username
+                </label>
+                <div className="relative">
+                  <UserCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    id="username"
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={form.username}
+                    onChange={handleChange}
+                    autoComplete="new-password"
+                    className="w-full pl-9 pr-10 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-brand-main/30 focus:border-brand-main/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setForm((prev) => ({
+                        ...prev,
+                        username: generateUsername(prev.nome, prev.apelido),
+                      }))
+                    }
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    aria-label="Gerar novo username"
+                  >
+                    <RefreshCcw className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  {usernameEdited
+                    ? "Você personalizou seu username"
+                    : "Podes Usar esse username e senha para Login/Entrar."}
+                </p>
+              </div>
+
+              {/* Password */}
+              <div>
+                <label htmlFor="password" className="sr-only">
+                  Senha
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Senha"
+                    value={form.password}
+                    onChange={handleChange}
+                    className="w-full pl-9 pr-10 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-brand-main/30 focus:border-brand-main/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div>
+                <label htmlFor="confirmPassword" className="sr-only">
+                  Confirmar Senha
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Confirmar Senha"
+                    value={form.confirmPassword}
+                    onChange={handleChange}
+                    className="w-full pl-9 pr-10 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-brand-main/30 focus:border-brand-main/20 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+                {!passwordsMatch && form.confirmPassword && (
+                  <p className="text-xs text-red-500 mt-1">As senhas não coincidem</p>
+                )}
+              </div>
+
+              {/* Terms */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={acceptedTerms}
+                  onChange={() => setAcceptedTerms((prev) => !prev)}
+                  id="terms"
+                  className="w-4 h-4 text-brand-main border-gray-300 rounded focus:ring-1 focus:ring-brand-main/30"
+                />
+                <label htmlFor="nossos-termos" className="text-xs text-gray-500 dark:text-gray-400">
+                  Aceito os{" "}
+                  <Link href="/nossos-termos" target="_blank" className="text-brand-main hover:text-brand-lime">
+                    Termos e Condições
+                  </Link>
+                </label>
+              </div>
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={!isFormValid || loading}
+                className="w-full py-2 bg-brand-main hover:bg-brand-lime text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                {loading ? "Cadastrando..." : "Criar Conta"}
+              </button>
+                <div className="relative flex items-center justify-center my-4">
+                <div className="border-t border-gray-200 w-full"></div>
+                <span className="bg-white  text-xs text-gray-500">ou</span>
+                <div className="border-t border-gray-200 w-full"></div>
+              </div>
+
+              <div className="flex items-center justify-center w-full">
+                <GoogleLoginButton/>
+              </div>
+            </form>
+
+            <div className="text-center mt-5">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Já tem uma conta?{" "}
+                <Link
+                  href="/login"
+                  className="text-brand-main hover:text-brand-lime font-medium"
+                >
+                  Entrar
+                </Link>
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </>
+  );
+}
