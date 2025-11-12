@@ -10,7 +10,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {/* Conteúdo principal */}
         {/* <Sidebar /> */}
       <main className="md:flex-1 lg:flex-1 transition-all duration-300">
-        <div className="p-6">
+        <div className="">
           {children}
         </div>
       </main>

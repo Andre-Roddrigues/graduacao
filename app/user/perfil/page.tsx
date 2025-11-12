@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
+    <div>
     <div className="p-4">
       {/* Breadcrumb */}
       <div className="mb-4 flex items-center text-sm text-gray-600 hover:text-gray-800">
@@ -25,6 +26,7 @@ export default function Page() {
 
       <CandidatoHeader />
       <UserProfile />
+    </div>
       <CTAGraduacaoPerfil />
     </div>
   );
