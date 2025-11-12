@@ -7,8 +7,9 @@ import {
   Variant,
   MotionConfig,
 } from 'framer-motion';
-import { cn } from '@/lib/utils';
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { cn } from '../../lib/utils';
 
 type AccordionContextType = {
   expandedValue: React.Key | null;
@@ -113,7 +114,7 @@ function AccordionItem({ value, children, className }: AccordionItemProps) {
       {...(isExpanded ? { 'data-expanded': '' } : {})}
     >
       {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
+        if (React.isValidElement<{ value?: React.Key; expanded?: boolean }>(child)) {
           return React.cloneElement(child, {
             ...child.props,
             value,
