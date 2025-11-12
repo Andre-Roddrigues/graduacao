@@ -1,7 +1,7 @@
 "use client"
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback} from "use-debounce"
