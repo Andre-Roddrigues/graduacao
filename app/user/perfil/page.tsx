@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 
 import UserProfile from '../../../components/user/perfil/perfilUser';
 import CandidatoHeader from "../../../components/user/perfil/UserHeader";
+import CTAGraduacaoPerfil from "../../../components/Landing/Graduacao/CTAGraduacaoPerfil";
 
 export const metadata: Metadata = {
   title: "Perfil",
@@ -24,6 +25,7 @@ export default function Page() {
 
       <CandidatoHeader />
       <UserProfile />
+      <CTAGraduacaoPerfil />
     </div>
   );
 }

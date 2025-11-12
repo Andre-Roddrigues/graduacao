@@ -2,7 +2,7 @@
 import React from "react";
 import { Check, Heart, FileText, Clock } from "lucide-react";
 
-export default function CTAGraduacao() {
+export default function CTAGraduacaoPerfil() {
     return (
         <div className="relative bg-brand-main shadow-2xl overflow-hidden">
             {/* Formas geométricas */}
@@ -40,16 +40,6 @@ export default function CTAGraduacao() {
                         conhecimento e construir uma carreira que será motivo de orgulho
                         para você e para quem acredita em você.
                     </p>
-
-                    {/* CTA */}
-                    <div className="flex flex-wrap items-center gap-4">
-                        <a
-                            href="/user/graduacao"
-                            className="bg-brand-lime hover:bg-brand-blue text-white font-semibold px-6 py-3 rounded-full text-sm transition-colors"
-                        >
-                            PAGAR GRADUAÇÃO
-                        </a>
-                    </div>
                 </div>
 
                 {/* Direita - O que inclui a participação */}

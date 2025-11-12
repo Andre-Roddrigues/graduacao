@@ -104,10 +104,10 @@ export default function GraduacaoPage() {
             <section className="py-20 bg-brand-lime text-white">
                 <div className="container mx-auto px-6 text-center">
                     <div className="max-w-4xl mx-auto">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-8">
+                        <h2 className="text-4xl  font-bold mb-8">
                             Seu Futuro Profissional Espera por Você
                         </h2>
-                        <p className="text-xl md:text-2xl mb-8 leading-relaxed">
+                        <p className="text-xl md:text-xl mb-8 leading-relaxed">
                             Enquanto você hesita, outras pessoas estão conquistando as vagas
                             que poderiam ser suas. A graduação não é apenas um diploma -
                             é a chave que abre portas para oportunidades reais.
