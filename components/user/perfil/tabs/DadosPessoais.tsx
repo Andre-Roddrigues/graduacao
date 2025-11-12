@@ -167,7 +167,7 @@ const hasCertificadoValido = certificados.some(
   };
 
   const getDocumentMaxLength = () => {
-    return TIPOS_DOCUMENTO.find((d) => d.value === data.tipoDocumento)?.maxLength || 20;
+    return TIPOS_DOCUMENTO.find((d) => d.value === data.tipoDocumento)?.maxLength || 13;
   };
 
   const getDocumentPlaceholder = () => {
