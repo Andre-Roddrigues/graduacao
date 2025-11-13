@@ -93,7 +93,7 @@ export default function CTAGraduacao() {
                                 <div>
                                     <div className="text-white font-semibold text-sm mb-1">Responsabilidade social:</div>
                                     <div className="text-white text-xs">
-                                        15% do valor será destinado à Instituição Dom Orione, como forma de apoio solidário.
+                                        15% do valor será destinado à Instituição Dom Orione, como forma de apoio solidário e  o(a) graduado(a) estará presente no acto da entrega, com direito a uma camiseta.
                                     </div>
                                 </div>
                             </div>
