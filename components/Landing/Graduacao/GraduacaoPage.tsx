@@ -59,7 +59,7 @@ export default function GraduacaoPage() {
                                 o passaporte para oportunidades reais de crescimento profissional.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <Link href="/user/graduacao">
+                                <Link href="/user/perfil">
                                 <button className="border-2 border-brand-main text-brand-main hover:bg-brand-main hover:text-white font-semibold px-8 py-4 rounded-full text-lg transition-all">
                                     Criar Meu Perfil
                                 </button>
