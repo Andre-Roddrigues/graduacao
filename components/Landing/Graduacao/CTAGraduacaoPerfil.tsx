@@ -33,7 +33,7 @@ export default function CTAGraduacao() {
                     </h2>
 
                     {/* Descrição com Local e Hora */}
-                    <div className="space-y-4">
+                    <div className=" mt-18">
                         <p className="text-white text-sm leading-relaxed max-w-md">
                             A sua graduação é o primeiro passo para transformar sonhos em
                             conquistas reais. Este é o momento de acreditar no seu potencial, 
@@ -42,12 +42,12 @@ export default function CTAGraduacao() {
                         </p>
                         
                         {/* Informações do Evento */}
-                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                        <div className="bg-white/10 mt-12 backdrop-blur-sm mt-20 rounded-xl p-4 border border-white/20">
                             <div className="flex items-center gap-3">
                                 <MapPin className="w-5 h-5 text-brand-lime" />
                                 <div>
                                     <p className="text-white text-sm font-medium">
-                                        Centro Cultural Juvenil Mozart
+                                        Centro de Recursos Juvenis Mozarte
                                     </p>
                                     <p className="text-gray-300 text-xs">
                                         12 de Dezembro de 2025 às 09:00

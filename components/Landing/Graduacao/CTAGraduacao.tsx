@@ -47,7 +47,7 @@ export default function CTAGraduacao() {
                                 <MapPin className="w-5 h-5 text-brand-lime" />
                                 <div>
                                     <p className="text-white text-sm font-medium">
-                                        Centro Cultural Juvenil Mozart
+                                        Centro de Recursos Juvenis Mozarte
                                     </p>
                                     <p className="text-gray-300 text-xs">
                                         12 de Dezembro de 2025 às 09:00
