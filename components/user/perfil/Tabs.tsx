@@ -217,9 +217,10 @@ export default function HorizontalTabsWithApply({
             {/* Botão de Candidatura */}
             <div className="lg:text-right">
               <ApplyButton
-                isEnabled={requisitosObrigatoriosOK}
-                onClick={handleApply}
-              />
+    isEnabled={requisitosObrigatoriosOK}
+    onClick={handleApply}
+    onCompleteProfile={() => window.location.href = '/completar-perfil'}
+  />
             </div>
           </div>
         </div>

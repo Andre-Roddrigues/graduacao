@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import { Check, Heart, FileText, Clock } from "lucide-react";
+import { Check, Heart, FileText, Clock, MapPin, Calendar } from "lucide-react";
 
 export default function CTAGraduacao() {
     return (
@@ -18,8 +18,8 @@ export default function CTAGraduacao() {
                     <div className="flex items-center space-x-3">
                         <div>
                             <div className="font-bold text-white text-2xl"><CompactCountdown /></div>
-                            <div className="text-xs text-gray-300">
-
+                            <div className="text-xs text-gray-300 mt-1">
+                                Prazo de Pagamento até o dia <strong>28 de Novembro de 2025</strong>
                             </div>
                         </div>
                     </div>
@@ -32,19 +32,35 @@ export default function CTAGraduacao() {
                         <span className="text-brand-lime">que Transforma Futuros</span>
                     </h2>
 
-                    {/* Descrição */}
-                    <p className="text-white text-sm leading-relaxed max-w-md">
-                        A sua graduação é o primeiro passo para transformar sonhos em
-                        conquistas reais.
-                        Este é o momento de acreditar no seu potencial, investir no seu
-                        conhecimento e construir uma carreira que será motivo de orgulho
-                        para você e para quem acredita em você.
-                    </p>
+                    {/* Descrição com Local e Hora */}
+                    <div className="space-y-4">
+                        <p className="text-white text-sm leading-relaxed max-w-md">
+                            A sua graduação é o primeiro passo para transformar sonhos em
+                            conquistas reais. Este é o momento de acreditar no seu potencial, 
+                            investir no seu conhecimento e construir uma carreira que será 
+                            motivo de orgulho para você e para quem acredita em você.
+                        </p>
+                        
+                        {/* Informações do Evento */}
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                            <div className="flex items-center gap-3">
+                                <MapPin className="w-5 h-5 text-brand-lime" />
+                                <div>
+                                    <p className="text-white text-sm font-medium">
+                                        Centro Cultural Juvenil Mozart
+                                    </p>
+                                    <p className="text-gray-300 text-xs">
+                                        12 de Dezembro de 2025 às 09:00
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* CTA */}
                     <div className="flex flex-wrap items-center gap-4">
                         <a
-                            href="/user/graduacao"
+                            href="/user/perfil"
                             className="bg-brand-lime hover:bg-brand-blue text-white font-semibold px-6 py-3 rounded-full text-sm transition-colors"
                         >
                             PAGAR GRADUAÇÃO
