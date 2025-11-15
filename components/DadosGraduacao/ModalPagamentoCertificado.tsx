@@ -309,7 +309,6 @@ const ModalPagamentoCertificado: React.FC<ModalPagamentoCertificadoProps> = ({
                     <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 rounded-xl mb-8">
                       <p className="text-sm text-gray-600 dark:text-gray-400">Valor do Certificado</p>
                       <p className="text-3xl font-bold text-gray-800 dark:text-white">{certificado?.preco} MT</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Taxa de emissão do certificado digital</p>
                     </div>
 
                     <div className="mb-8">
@@ -419,7 +418,7 @@ const ModalPagamentoCertificado: React.FC<ModalPagamentoCertificadoProps> = ({
                         )}
                       </button>
                       <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-3">
-                        Certificado digital emitido em 24 horas após confirmação do pagamento
+                        Certificado emitido em 24 horas após confirmação do pagamento
                       </p>
                     </div>
                   </div>
@@ -432,9 +431,7 @@ const ModalPagamentoCertificado: React.FC<ModalPagamentoCertificadoProps> = ({
                       Benefícios do Certificado
                     </h4>
                     <ul className="space-y-2 text-sm text-blue-700 dark:text-blue-300">
-                      <li>• Certificado digital válido nacionalmente</li>
-                      <li>• Código QR para verificação de autenticidade</li>
-                      <li>• Download imediato após aprovação</li>
+                      <li>• Certificado válido nacionalmente</li>
                       <li>• Reconhecimento por empregadores</li>
                       <li>• Validade permanente</li>
                     </ul>
@@ -446,8 +443,6 @@ const ModalPagamentoCertificado: React.FC<ModalPagamentoCertificadoProps> = ({
                     </h4>
                     <ul className="space-y-2 text-sm text-yellow-700 dark:text-yellow-300">
                       <li>• Certificado emitido em 24 horas úteis</li>
-                      <li>• Enviaremos o certificado por email</li>
-                      <li>• Verificação online disponível</li>
                       <li>• Dúvidas? Contacte: +258 870088787</li>
                     </ul>
                   </div>
