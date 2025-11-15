@@ -112,7 +112,7 @@ export default function CTAGraduacao() {
                                 <div>
                                     <div className="text-white font-semibold text-sm mb-1">Nota:</div>
                                     <div className="text-white text-xs">
-                                        Se ainda não efetuou o pagamento do certificado (1.400 MT), poderá fazê-lo nesta plataforma em conjunto com o pagamento da graduação.
+                                        Se ainda não efectuou o pagamento do certificado (1.400 MT), poderá fazê-lo nesta plataforma em conjunto com o pagamento da graduação.
                                     </div>
                                 </div>
                             </div>
