@@ -1,257 +1,280 @@
-"use client"
-import React, { useState, useEffect } from "react";
-import CTAGraduacao from "./CTAGraduacao";
+"use client";
+
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  UserPlus,
+  BadgeCheck,
+  GraduationCap,
+  TrendingUp,
+  ShieldCheck,
+  Crown,
+  Users,
+} from "lucide-react";
+import CTAGraduacao from "./CTAGraduacao";
+
+const slides = [
+  { src: "/images/gr4.jpg", alt: "Profissional bem-sucedido" },
+  { src: "/images/gr2.jpg", alt: "Estudantes em sala de aula" },
+  { src: "/images/gr6.jpg", alt: "Formatura universitária" },
+  { src: "/images/gr5.jpg", alt: "Networking profissional" },
+];
+
+const passos = [
+  {
+    icon: UserPlus,
+    titulo: "Crie o seu perfil",
+    descricao: "Registe a sua formação, experiência e principais competências.",
+  },
+  {
+    icon: BadgeCheck,
+    titulo: "Integre a base de talentos",
+    descricao: "O seu perfil passa a estar disponível para empresas parceiras.",
+  },
+  {
+    icon: GraduationCap,
+    titulo: "Garanta a sua graduação",
+    descricao: "Complete a inscrição e inicie a sua carreira com confiança.",
+  },
+];
+
+const beneficios = [
+  {
+    icon: TrendingUp,
+    titulo: "Melhor remuneração",
+    descricao: "Profissionais graduados tendem a ganhar significativamente mais.",
+  },
+  {
+    icon: ShieldCheck,
+    titulo: "Maior estabilidade",
+    descricao: "Um diploma aumenta as suas oportunidades de empregabilidade.",
+  },
+  {
+    icon: Crown,
+    titulo: "Progressão de carreira",
+    descricao: "A formação abre caminho para cargos de liderança.",
+  },
+  {
+    icon: Users,
+    titulo: "Rede de contactos",
+    descricao: "Conecte-se com profissionais e empresas do sector.",
+  },
+];
 
 export default function GraduacaoPage() {
-    const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  }, []);
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 6000);
+    return () => clearInterval(interval);
+  }, [nextSlide]);
+
+  return (
+    <main className="bg-white text-slate-800">
+      {/* Hero — ocupa todo o ecrã */}
+      {/* Hero — fundo azul, texto à esquerda, imagens à direita */}
+<section className="relative w-full overflow-hidden bg-brand-main">
+  {/* Decoração de fundo opcional */}
+  <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+  <div className="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-brand-lime/20 blur-3xl" />
+
+  <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center gap-10 px-6 py-24 lg:flex-row lg:gap-16 lg:px-8">
     
-    const slides = [
-        {
-            src: "/images/gr4.jpg",
-            alt: "Profissional bem-sucedido"
-        },
-        {
-            src: "/images/gr2.jpg",
-            alt: "Estudantes em sala de aula"
-        },
-        {
-            src: "/images/gr6.jpg", 
-            alt: "Formatura universitária"
-        },
-        {
-            src: "/images/gr5.jpg",
-            alt: "Networking profissional"
-        }
-    ];
+    {/* Texto — lado esquerdo */}
+    <div className="w-full lg:w-1/2">
 
-    const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-    };
+      <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+        A graduação que o{" "}
+        <span className="text-brand-lime">mercado precisa</span>
+      </h1>
 
-    const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    };
+      <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85 sm:text-xl">
+        Uma formação que combina conhecimento teórico e prático, pensada
+        para lhe abrir portas a oportunidades reais de crescimento
+        profissional.
+      </p>
 
-    // Auto-rotate slides
-    useEffect(() => {
-        const interval = setInterval(nextSlide, 5000);
-        return () => clearInterval(interval);
-    }, []);
+      <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+        <Link
+          href="/user/perfil"
+          className="group inline-flex items-center justify-center gap-2 rounded-lg bg-brand-lime px-7 py-4 text-base font-semibold text-slate-900 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+        >
+          Criar o meu perfil
+          <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+        </Link>
+        <a
+          href="#como-funciona"
+          className="inline-flex items-center justify-center rounded-lg border border-white/30 px-7 py-4 text-base font-semibold text-white transition-colors hover:bg-white/10"
+        >
+          Saber mais
+        </a>
+      </div>
+    </div>
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
-            {/* Hero Section Motivacional */}
-            <section className="relative py-20 overflow-hidden">
-                <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div className="space-y-8">
-                            <div className="inline-block bg-brand-lime/20 text-brand-main px-6 py-2 rounded-full text-sm font-semibold">
-                                Sua Carreira Começa Aqui
-                            </div>
-                            <h1 className="text-5xl md:text-6xl font-bold text-brand-lime/70 leading-tight">
-                                A Graduação que o
-                                <span className="text-brand-main"> Mercado Precisa</span>
-                            </h1>
-                            <p className="text-xl text-gray-700 leading-relaxed">
-                                Destaque-se no mercado de trabalho com uma formação que
-                                combina conhecimento teórico e prático. Sua graduação é
-                                o passaporte para oportunidades reais de crescimento profissional.
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <Link href="/user/perfil">
-                                <button className="border-2 border-brand-main text-brand-main hover:bg-brand-main hover:text-white font-semibold px-8 py-4 rounded-full text-lg transition-all">
-                                    Criar Meu Perfil
-                                </button>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="relative">
-                            <div className="relative z-10 bg-white p-8 rounded-3xl shadow-2xl overflow-hidden">
-                                {/* Slide Container */}
-                                <div className="relative h-96 rounded-2xl overflow-hidden">
-                                    {slides.map((slide, index) => (
-                                        <div
-                                            key={index}
-                                            className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-                                                index === currentSlide ? 'opacity-100' : 'opacity-0'
-                                            }`}
-                                        >
-                                            <img
-                                                src={slide.src}
-                                                alt={slide.alt}
-                                                className="w-full h-full object-cover object-top"
-                                            />
-                                        </div>
-                                    ))}
-                                    
-                                    {/* Navigation Arrows */}
-                                    <button
-                                        onClick={prevSlide}
-                                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 transition-all shadow-lg"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                                        </svg>
-                                    </button>
-                                    <button
-                                        onClick={nextSlide}
-                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 transition-all shadow-lg"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </button>
+    {/* Imagens / carrossel — lado direito */}
+    <div className="relative w-full lg:w-1/2">
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl shadow-2xl ring-1 ring-white/20">
+        {slides.map((slide, index) => (
+          <img
+            key={slide.src}
+            src={slide.src}
+            alt={index === currentSlide ? slide.alt : ""}
+            aria-hidden={index !== currentSlide}
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ease-in-out ${
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
 
-                                    {/* Slide Indicators */}
-                                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                                        {slides.map((_, index) => (
-                                            <button
-                                                key={index}
-                                                onClick={() => setCurrentSlide(index)}
-                                                className={`w-3 h-3 rounded-full transition-all ${
-                                                    index === currentSlide 
-                                                        ? 'bg-white' 
-                                                        : 'bg-white/50 hover:bg-white/80'
-                                                }`}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-brand-lime rounded-2xl rotate-12"></div>
-                            <div className="absolute -top-6 -left-6 w-32 h-32 bg-brand-blue rounded-2xl -rotate-12"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        {/* Controlos do carrossel sobre a imagem */}
+        <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-4">
+          <button
+            onClick={prevSlide}
+            aria-label="Imagem anterior"
+            className="rounded-full bg-white/20 p-2 text-white backdrop-blur transition hover:bg-white/40"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
 
-            {/* Seção - Perfil para o Mercado de Trabalho */}
-            <section className="py-16 bg-white">
-                <div className="container mx-auto px-6">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                            Perfil para o Mercado de Trabalho
-                        </h2>
-                        <p className="text-xl text-gray-700">
-                            Construa um perfil profissional que chame a atenção das melhores
-                            empresas. Sua graduação é o diferencial que vai destacar seu
-                            currículo no competitivo mercado actual.
-                        </p>
-                    </div>
+          <div className="flex gap-2">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                aria-label={`Ir para a imagem ${index + 1}`}
+                className={`h-2.5 rounded-full transition-all ${
+                  index === currentSlide
+                    ? "w-8 bg-brand-lime"
+                    : "w-2.5 bg-white/60 hover:bg-white/90"
+                }`}
+              />
+            ))}
+          </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="text-center p-8 bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl hover:shadow-xl transition-all">
-                            <div className="w-20 h-20 bg-brand-main rounded-full flex items-center justify-center mx-auto mb-6">
-                                <div className="text-white font-bold text-2xl">1</div>
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Preencha o Seu Perfil</h3>
-                            <p className="text-gray-700">
-                                Crie seu perfil profissional com suas formações,
-                                experiências e principais competências.
-                            </p>
-                        </div>
-
-                        <div className="text-center p-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-3xl hover:shadow-xl transition-all">
-                            <div className="w-20 h-20 bg-brand-lime rounded-full flex items-center justify-center mx-auto mb-6">
-                                <div className="text-white font-bold text-2xl">2</div>
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Vantagens Exclusivas</h3>
-                            <p className="text-gray-700">
-                                Você será integrado na nossa base de dados de talentos,
-                                aumentando suas chances de ser escolhido para as melhores oportunidades
-                            </p>
-                        </div>
-
-                        <div className="text-center p-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-3xl hover:shadow-xl transition-all">
-                            <div className="w-20 h-20 bg-brand-main rounded-full flex items-center justify-center mx-auto mb-6">
-                                <div className="text-white font-bold text-2xl">3</div>
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Marque a Sua Graduação</h3>
-                            <p className="text-gray-700">
-                                Dê o primeiro passo rumo ao
-                                sucesso profissional que você merece.
-                                Garanta sua graduação e comece a construir uma carreira sólida e promissora hoje mesmo.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Mensagem Inspiradora */}
-            <section className="py-20 bg-brand-lime text-white">
-                <div className="container mx-auto px-6 text-center">
-                    <div className="max-w-4xl mx-auto">
-                        <h2 className="text-4xl  font-bold mb-8">
-                            Seu Futuro Profissional Espera por Você
-                        </h2>
-                        <p className="text-xl md:text-xl mb-8 leading-relaxed">
-                            Enquanto você hesita, outras pessoas estão conquistando as vagas
-                            que poderiam ser suas. A graduação não é apenas um diploma -
-                            é a chave que abre portas para oportunidades reais.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Benefícios da Graduação */}
-            <section className="py-16 bg-gray-100">
-                <div className="container mx-auto px-6">
-                    <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
-                        Por que uma Graduação Faz a Diferença?
-                    </h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <div className="text-center p-6">
-                            <div className="w-16 h-16 bg-brand-lime rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-brand-lime mb-2">Maiores Recompensas</h3>
-                            <p className="text-gray-700">
-                                Profissionais com graduação ganham em média 2,5 vezes mais
-                            </p>
-                        </div>
-
-                        <div className="text-center p-6">
-                            <div className="w-16 h-16 bg-brand-main rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-brand-main mb-2">Estabilidade</h3>
-                            <p className="text-gray-700">
-                                Menos chance de ficar desempregado com diploma
-                            </p>
-                        </div>
-
-                        <div className="text-center p-6">
-                            <div className="w-16 h-16 bg-brand-lime rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-brand-lime mb-2">Promoções</h3>
-                            <p className="text-gray-700">
-                                3x mais chances de alcançar cargos de liderança
-                            </p>
-                        </div>
-                        <div className="text-center p-6">
-                            <div className="w-16 h-16 bg-brand-main rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-brand-main mb-2">Networking</h3>
-                            <p className="text-gray-700">
-                                Conecte-se com profissionais e empresas do mercado
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <CTAGraduacao />
+          <button
+            onClick={nextSlide}
+            aria-label="Imagem seguinte"
+            className="rounded-full bg-white/20 p-2 text-white backdrop-blur transition hover:bg-white/40"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
         </div>
-    );
+      </div>
+    </div>
+  </div>
+</section>
+
+      {/* Como funciona */}
+      <section id="como-funciona" className="py-24">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              Como funciona
+            </h2>
+            <p className="mt-4 text-lg text-slate-600">
+              Três passos simples para dar visibilidade ao seu percurso
+              académico e profissional.
+            </p>
+          </div>
+
+          <div className="mt-16 grid gap-6 md:grid-cols-3">
+            {passos.map((passo, index) => {
+              const Icon = passo.icon;
+              return (
+                <div
+                  key={passo.titulo}
+                  className="rounded-2xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:border-brand-main/30 hover:shadow-lg"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-main/10 text-brand-main">
+                      <Icon className="h-6 w-6" />
+                    </span>
+                    <span className="text-sm font-semibold text-slate-400">
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <h3 className="mt-6 text-xl font-semibold text-slate-900">
+                    {passo.titulo}
+                  </h3>
+                  <p className="mt-3 leading-relaxed text-slate-600">
+                    {passo.descricao}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefícios */}
+      <section className="bg-slate-50 py-24">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              Porque vale a pena graduar-se
+            </h2>
+            <p className="mt-4 text-lg text-slate-600">
+              Uma graduação é um investimento que se reflete no seu percurso ao
+              longo de toda a carreira.
+            </p>
+          </div>
+
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {beneficios.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.titulo}
+                  className="rounded-2xl bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                >
+                  <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand-lime/15 text-brand-main">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="mt-5 font-semibold text-slate-900">
+                    {item.titulo}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                    {item.descricao}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Faixa de chamada */}
+      {/* <section className="bg-brand-main py-20 text-white">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            O seu futuro profissional começa com um passo
+          </h2>
+          <p className="mt-5 text-lg leading-relaxed text-white/85">
+            Crie já o seu perfil e dê o primeiro passo para uma carreira sólida
+            e com propósito.
+          </p>
+          <Link
+            href="/user/perfil"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-7 py-4 text-base font-semibold text-brand-main shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
+          >
+            Criar o meu perfil
+            <ArrowRight className="h-5 w-5" />
+          </Link>
+        </div>
+      </section> */}
+
+      <CTAGraduacao />
+    </main>
+  );
 }

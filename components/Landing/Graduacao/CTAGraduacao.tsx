@@ -19,7 +19,7 @@ export default function CTAGraduacao() {
                         <div>
                             <div className="font-bold text-white text-2xl"><CompactCountdown /></div>
                             <div className="text-xs text-gray-300 mt-1">
-                                Prazo de Pagamento até o dia <strong>28 de Novembro de 2025</strong>
+                                Prazo de Pagamento até o dia <strong>28 de Novembro de 2026</strong>
                             </div>
                         </div>
                     </div>
@@ -47,10 +47,10 @@ export default function CTAGraduacao() {
                                 <MapPin className="w-5 h-5 text-brand-lime" />
                                 <div>
                                     <p className="text-white text-sm font-medium">
-                                        Centro de Recursos Juvenis Mozarte
+                                        Local: Por confirmar
                                     </p>
                                     <p className="text-gray-300 text-xs">
-                                        12 de Dezembro de 2025 às 09:00
+                                        04 de Dezembro de 2026 às 09:00
                                     </p>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@ export default function CTAGraduacao() {
                         {/* Custo */}
                         <div className="text-center mb-6">
                             <div className="text-white text-lg mb-2">A participação tem o custo de</div>
-                            <div className="text-3xl font-bold text-brand-lime">2.800 MT</div>
+                            <div className="text-3xl font-bold text-brand-lime">2.100 MT</div>
                             <div className="text-white text-sm mt-1">que inclui:</div>
                         </div>
                         
@@ -98,7 +98,7 @@ export default function CTAGraduacao() {
                                 <div className="w-6 h-6 bg-brand-lime rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                                     <Check className="w-3 h-3 text-white" />
                                 </div>
-                                <p className="text-white text-sm">Almoço para o(a) graduado(a) e 1 convidado</p>
+                                <p className="text-white text-sm">Direito a 1 convidado</p>
                             </div>
                         </div>
 
@@ -138,7 +138,7 @@ export default function CTAGraduacao() {
 // Componente de Contagem Regressiva Compacta (para o logo)
 function CompactCountdown() {
     const calculateTimeLeft = () => {
-        const targetDate = new Date('2025-11-28T23:59:59');
+        const targetDate = new Date('2026-11-20T23:59:59');
         const now = new Date();
         const difference = targetDate.getTime() - now.getTime();
 
